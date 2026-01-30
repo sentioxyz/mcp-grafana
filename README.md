@@ -52,6 +52,11 @@ The dashboard tools now include several strategies to manage context window usag
 - **Query Loki metadata:** Retrieve label names, label values, and stream statistics from Loki datasources.
 - **Query Loki patterns:** Retrieve log patterns detected by Loki to identify common log structures and anomalies.
 
+### ClickHouse Querying
+
+- **Query ClickHouse logs:** Execute SQL queries against ClickHouse datasources for log data. Supports time range parameters (from/to) passed to Grafana's query API. Use the `$__timeFilter(column)` macro in your SQL for automatic time filtering (e.g., `WHERE $__timeFilter(timestamp)`).
+- **Query ClickHouse metadata:** List available databases and tables, and retrieve table schemas from ClickHouse datasources.
+
 ### Incidents
 
 - **Search, create, and update incidents:** Manage incidents in Grafana Incident, including searching, creating, and adding activities to incidents.
@@ -215,6 +220,9 @@ Scopes define the specific resources that permissions apply to. Each action requ
 | `list_loki_label_values`          | Loki        | List values for a specific log label                                | `datasources:query`                     | `datasources:uid:loki-uid`                          |
 | `query_loki_stats`                | Loki        | Get statistics about log streams                                    | `datasources:query`                     | `datasources:uid:loki-uid`                          |
 | `query_loki_patterns`             | Loki        | Query detected log patterns to identify common structures           | `datasources:query`                     | `datasources:uid:loki-uid`                          |
+| `query_clickhouse_logs`           | ClickHouse  | Execute SQL queries against ClickHouse for logs                     | `datasources:query`                     | `datasources:uid:clickhouse-uid`                    |
+| `list_clickhouse_tables`          | ClickHouse  | List databases and tables in ClickHouse                             | `datasources:query`                     | `datasources:uid:clickhouse-uid`                    |
+| `describe_clickhouse_table`       | ClickHouse  | Get schema for a ClickHouse table                                   | `datasources:query`                     | `datasources:uid:clickhouse-uid`                    |
 | `list_alert_rules`                | Alerting    | List alert rules                                                    | `alert.rules:read`                      | `folders:*` or `folders:uid:alerts-folder`          |
 | `get_alert_rule_by_uid`           | Alerting    | Get alert rule by UID                                               | `alert.rules:read`                      | `folders:uid:alerts-folder`                         |
 | `create_alert_rule`               | Alerting    | Create a new alert rule                                             | `alert.rules:write`                     | `folders:*` or `folders:uid:alerts-folder`          |
@@ -268,6 +276,7 @@ The `mcp-grafana` binary supports various command-line flags for configuration:
 - `--disable-prometheus`: Disable prometheus tools
 - `--disable-write`: Disable write tools (create/update operations)
 - `--disable-loki`: Disable loki tools
+- `--disable-clickhouse`: Disable clickhouse tools
 - `--disable-alerting`: Disable alerting tools
 - `--disable-dashboard`: Disable dashboard tools
 - `--disable-oncall`: Disable oncall tools
